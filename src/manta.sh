@@ -4,8 +4,8 @@ main() {
     set -exo pipefail
 
     # Install packages
-    sudo apt-get update -qq
     sudo apt-get install -qq bzip2 gcc g++ make python zlib1g-dev samtools
+    sudo apt-get update -qq
 
     echo "Value of normal_bam: '$normal_bam'"
     echo "Value of normal_bam_index: '$normal_bam_index'"
@@ -26,7 +26,7 @@ main() {
 
     CONFIG_CMD="configManta.py" # --bam input.bam --referenceFasta reference.fa --runDir run
 
-    # Check inputs
+    # Check input BAMs
     if [[ -z "$tumor_bam" ]]; then
       echo "[*] No tumor sample. Assuming normal bams only"
       for bam in $HOME/inputs/*.bam
@@ -42,23 +42,22 @@ main() {
     else
       echo "[*] Tumor BAM detected. Will pair with one normal BAM sample."
 
-      normal_bams=($HOME/inputs/*.bam)
-      echo "DEBUG: ${normal_bams}"
+      bams=($HOME/inputs/*.bam)
+      echo "DEBUG: ${bams}"
 
-      if [ "${normal_bams[@]}" -gt 1]; then
+      if [ "${bams[@]}" -gt 1]; then
         echo "[*] Found multiple normal bams, only one will be picked."
       fi
 
-      normal_bam=${normal_bams[0]}
-      echo "DEBUG: ${normal_bam}"
-      normal_bam_name=`basename $bam`
-      if [[ -z "$HOME/inputs/$normal_bam_name.bai" ]]; then
+      bam=${bams[0]}
+      echo "DEBUG: ${bam}"
+      bam_name=`basename $bam`
+      if [[ -z "$HOME/inputs/$bam_name.bai" ]]; then
         echo "[*] No index file found for normal bam. Generating index..."
-        samtools index $normal_bam
+        samtools index $bam
       fi
-      CONFIG_CMD="${CONFIG_CMD} --normalBam ${normal_bam}"
+      CONFIG_CMD="${CONFIG_CMD} --normalBam ${bam}"
 
-      tumor_bam_name=`basename $HOME/in/tumor_bam/*.bam`
       echo "[*] Checking tumor bam file $tumor_bam_name"
       mv $HOME/in/tumor_bam/* inputs/
       mv $HOME/in/tumor_bam_index/* inputs/
@@ -70,15 +69,32 @@ main() {
       CONFIG_CMD="${CONFIG_CMD} --tumorBam inputs/${$tumor_bam_name}"
     fi
 
-    # Setup Reference Files
-    mv $reference_fasta_path inputs/
-    if [[ -z "$reference_fasta_index" ]]; then
-      echo "[*] No reference FASTA index found. Indexing now..."
-      samtools faidx inputs/$reference_fasta_name
+    # Setup Reference Fasta
+    if [[ -z "$reference_fasta" ]]; then
+      echo "[*] No reference FASTA found. Will choose a default hg38 reference."
+      if samtools view -H $HOME/inputs/$normal_bam_name | grep EBV; then
+        # EBV found
+        echo "[*] Using GRCh38_no_alt"
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6zYbY98vJvVX37 -o $HOME/inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6YQPfJ93kb9K54 -o $HOME/inputs/
+        CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/GRCh38_no_alt.fa"
+      else
+        # No EBV found
+        echo "[*] Using hg38m1x"
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4BkZj9PZxyvJQb586JXgZP -o $HOME/inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4Bp1Q9PZxjgVZ1KqV0KG1Z -o $HOME/inputs/
+        CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/hg38m1x.fa"
+      fi
     else
-      mv $reference_fasta_index_path inputs/
+      mv $reference_fasta_path inputs/
+      if [[ -z "$reference_fasta_index" ]]; then
+	echo "[*] No reference FASTA index found. Indexing now..."
+	samtools faidx inputs/$reference_fasta_name
+      else
+	mv $reference_fasta_index_path inputs/
+      fi
+      CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/$reference_fasta_name"
     fi
-    CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/$reference_fasta_name"
 
     # Add runDir option
     mkdir run
@@ -109,9 +125,7 @@ main() {
     # Move and upload outputs
     mkdir out
     mv run/results/variants out/variant_outputs
-    mv run/results/statistics out/statistics_outputs
+    mv run/results/stats out/statistics_outputs
     dx-upload-all-outputs
-
-    exit 1
 }
 

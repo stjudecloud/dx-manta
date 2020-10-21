@@ -1,0 +1,106 @@
+{
+  "name": "manta",
+  "title": "Manta",
+  "summary": "manta",
+  "dxapi": "1.0.0",
+  "version": "0.0.1",
+  "inputSpec": [
+    {
+      "name": "normal_bam",
+      "label": "Normal BAM(s)",
+      "class": "array:file",
+      "optional": false,
+      "patterns": ["*.bam"],
+      "help": "Normal BAM file(s)."
+    },
+    {
+      "name": "normal_bam_index",
+      "label": "Normal BAM index",
+      "class": "array:file",
+      "optional": true,
+      "patterns": ["*.bai"],
+      "help": "Normal BAM index file(s). If not provided, index will be generated."
+    },
+    {
+      "name": "tumor_bam",
+      "label": "Tumor BAM",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.bam"],
+      "help": "Tumor BAM file. If provided, only one normal BAM will be used."
+    },
+    {
+      "name": "tumor_bam_index",
+      "label": "Tumor BAM Index",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.bai"],
+      "help": "Tumor BAM index file. If not provided, index will be generated."
+    },
+    {
+      "name": "reference_fasta",
+      "label": "Reference FASTA",
+      "class": "file",
+      "optional": false,
+      "patterns": ["*.fa", "*.fasta"],
+      "help": "Reference FASTA file."
+    },
+    {
+      "name": "reference_fasta_index",
+      "label": "Reference FASTA Index",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.fai"],
+      "help": "Reference FASTA file index. If not provided, index will be generated."
+    },
+    {
+      "name": "output_contig",
+      "label": "Output Contig",
+      "class": "boolean",
+      "optional": true,
+      "default": true,
+      "help": "Flag for outputContig option. Default is true."
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "variant_outputs",
+      "label": "Variant Outputs",
+      "class": "array:file",
+      "help": "All files in the variants output folder."
+    },
+    {
+      "name": "statistics_outputs",
+      "label": "Statistics Outputs",
+      "class": "array:file",
+      "help": "All files in the statistics output folder."
+    }
+  ],
+  "runSpec": {
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "interpreter": "bash",
+    "file": "src/manta.sh",
+    "distribution": "Ubuntu",
+    "release": "16.04",
+    "version": "1"
+  },
+  "access": {
+    "network": [
+      "*"
+    ],
+    "project": "CONTRIBUTE"
+  },
+  "regionalOptions": {
+    "azure:westus": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "azure:mem1_ssd1_x8"
+        }
+      }
+    }
+  }
+}

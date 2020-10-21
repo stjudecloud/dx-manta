@@ -4,8 +4,8 @@ main() {
     set -exo pipefail
 
     # Install packages
-    sudo apt-get install -qq bzip2 gcc g++ make python zlib1g-dev samtools
     sudo apt-get update -qq
+    sudo apt-get install -qq bzip2 gcc g++ make python zlib1g-dev samtools
 
     echo "Value of normal_bam: '$normal_bam'"
     echo "Value of normal_bam_index: '$normal_bam_index'"
@@ -29,6 +29,7 @@ main() {
     # Check input BAMs
     if [[ -z "$tumor_bam" ]]; then
       echo "[*] No tumor sample. Assuming normal bams only"
+
       for bam in $HOME/inputs/*.bam
       do
         echo "Checking normal bam file $bam"
@@ -86,6 +87,7 @@ main() {
         CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/hg38m1x.fa"
       fi
     else
+      echo "[*] Reference FASTA found."
       mv $reference_fasta_path inputs/
       if [[ -z "$reference_fasta_index" ]]; then
 	echo "[*] No reference FASTA index found. Indexing now..."

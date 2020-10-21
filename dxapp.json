@@ -41,7 +41,7 @@
       "name": "reference_fasta",
       "label": "Reference FASTA",
       "class": "file",
-      "optional": false,
+      "optional": true,
       "patterns": ["*.fa", "*.fasta"],
       "help": "Reference FASTA file."
     },

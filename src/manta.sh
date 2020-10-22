@@ -14,6 +14,8 @@ main() {
     echo "Value of reference_fasta: '$reference_fasta'"
     echo "Value of reference_fasta_index: '$reference_fasta_index'"
     echo "Value of output_contig: '$output_contig'"
+    echo "Value of call_regions: '$call_regions'"
+    echo "Value of output_prefix: '$output_prefix'"
 
     echo "[*] Downloading all inputs"
     dx-download-all-inputs --parallel
@@ -35,7 +37,7 @@ main() {
       do
         echo "Checking normal bam file $bam"
         bam_name=`basename $bam`
-        if [[ -z "inputs/$bam_name.bai" ]]; then
+        if [ ! -f "inputs/$bam_name.bai" ]; then
           echo "[*] No index file found for bam. Generating index..."
           samtools index $bam
         fi
@@ -133,6 +135,15 @@ main() {
     mkdir out
     mv run/results/variants out/variant_outputs
     mv run/results/stats out/statistics_outputs
+
+    # Add output prefix to outputs
+    if [[ ! -z "$output_prefix" ]]; then
+      for f in out/*; do
+        mv {,$output_prefix.}$f
+      done
+    fi
+ 
+    echo "[*] Uploading outputs..."
     dx-upload-all-outputs
 }
 

@@ -108,6 +108,11 @@ main() {
       CONFIG_CMD="${CONFIG_CMD} --outputContig"
     fi
 
+    # Add callRegions option
+    if [ "$call_regions" = true ]; then
+      CONFIG_CMD="${CONFIG_CMD} --callRegions GRCh38.bed.gz"
+    fi
+
     # Install manta
     echo "[*] Installing manta..."
     wget https://github.com/Illumina/manta/releases/download/v1.6.0/manta-1.6.0.centos6_x86_64.tar.bz2
@@ -118,7 +123,6 @@ main() {
 
     echo "[*] Running Manta config..."
     echo $CONFIG_CMD
-    # eval $CONFIG_CMD
     RESULT=$($CONFIG_CMD)
     echo $RESULT
 

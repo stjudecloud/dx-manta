@@ -60,6 +60,14 @@
       "optional": true,
       "default": true,
       "help": "Flag for outputContig option. Default is true."
+    },
+    {
+      "name": "call_regions",
+      "label": "Call Regions",
+      "class": "boolean",
+      "optional": true,
+      "default": true,
+      "help": "Flag for callRegions option. Should only be used for GRCh38 samples."
     }
   ],
   "outputSpec": [

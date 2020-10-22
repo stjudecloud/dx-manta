@@ -19,22 +19,23 @@ main() {
     dx-download-all-inputs --parallel
 
     # Move input bams to inputs directory
-    echo $HOME
     mkdir inputs
-    mv $HOME/in/normal_bam/**/* inputs/
-    mv $HOME/in/normal_bam_index/**/* inputs/
+    mv in/normal_bam/**/* inputs/
+    if [[ ! -z "$normal_bam_index" ]]; then
+      mv in/normal_bam_index/**/* inputs/
+    fi
 
-    CONFIG_CMD="configManta.py" # --bam input.bam --referenceFasta reference.fa --runDir run
+    CONFIG_CMD="configManta.py"
 
     # Check input BAMs
     if [[ -z "$tumor_bam" ]]; then
       echo "[*] No tumor sample. Assuming normal bams only"
 
-      for bam in $HOME/inputs/*.bam
+      for bam in inputs/*.bam
       do
         echo "Checking normal bam file $bam"
         bam_name=`basename $bam`
-        if [[ -z "$HOME/inputs/$bam_name.bai" ]]; then
+        if [[ -z "inputs/$bam_name.bai" ]]; then
           echo "[*] No index file found for bam. Generating index..."
           samtools index $bam
         fi
@@ -43,7 +44,7 @@ main() {
     else
       echo "[*] Tumor BAM detected. Will pair with one normal BAM sample."
 
-      bams=($HOME/inputs/*.bam)
+      bams=(inputs/*.bam)
       echo "DEBUG: ${bams}"
 
       if [ "${bams[@]}" -gt 1]; then
@@ -53,18 +54,18 @@ main() {
       bam=${bams[0]}
       echo "DEBUG: ${bam}"
       bam_name=`basename $bam`
-      if [[ -z "$HOME/inputs/$bam_name.bai" ]]; then
+      if [[ -z "inputs/$bam_name.bai" ]]; then
         echo "[*] No index file found for normal bam. Generating index..."
         samtools index $bam
       fi
       CONFIG_CMD="${CONFIG_CMD} --normalBam ${bam}"
 
       echo "[*] Checking tumor bam file $tumor_bam_name"
-      mv $HOME/in/tumor_bam/* inputs/
-      mv $HOME/in/tumor_bam_index/* inputs/
+      mv in/tumor_bam/* inputs/
+      mv in/tumor_bam_index/* inputs/
       if [[ -z "inputs/$tumor_bam_name.bai" ]]; then
         echo "[*] No tumor bam index file found. Generating index..."
-        samtools index $HOME/inputs/$tumor_bam_name
+        samtools index inputs/$tumor_bam_name
       fi
 
       CONFIG_CMD="${CONFIG_CMD} --tumorBam inputs/${$tumor_bam_name}"
@@ -73,17 +74,17 @@ main() {
     # Setup Reference Fasta
     if [[ -z "$reference_fasta" ]]; then
       echo "[*] No reference FASTA found. Will choose a default hg38 reference."
-      if samtools view -H $HOME/inputs/$normal_bam_name | grep EBV; then
+      if samtools view -H inputs/$normal_bam_name | grep EBV; then
         # EBV found
         echo "[*] Using GRCh38_no_alt"
-        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6zYbY98vJvVX37 -o $HOME/inputs/
-        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6YQPfJ93kb9K54 -o $HOME/inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6zYbY98vJvVX37 -o inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-F89b7z09gk6YQPfJ93kb9K54 -o inputs/
         CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/GRCh38_no_alt.fa"
       else
         # No EBV found
         echo "[*] Using hg38m1x"
-        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4BkZj9PZxyvJQb586JXgZP -o $HOME/inputs/
-        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4Bp1Q9PZxjgVZ1KqV0KG1Z -o $HOME/inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4BkZj9PZxyvJQb586JXgZP -o inputs/
+        dx download project-F5444K89PZxXjBqVJ3Pp79B4:file-Fy4Bp1Q9PZxjgVZ1KqV0KG1Z -o inputs/
         CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/hg38m1x.fa"
       fi
     else

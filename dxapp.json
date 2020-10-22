@@ -92,13 +92,21 @@
     "network": [
       "*"
     ],
-    "project": "CONTRIBUTE"
+    "project": "CONTRIBUTE",
+    "allProjects": "VIEW"
   },
   "regionalOptions": {
     "azure:westus": {
       "systemRequirements": {
         "*": {
-          "instanceType": "azure:mem1_ssd1_x8"
+          "instanceType": "azure:mem1_ssd1_x16"
+        }
+      }
+    },
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x16"
         }
       }
     }

@@ -93,10 +93,10 @@ main() {
       echo "[*] Reference FASTA found."
       mv $reference_fasta_path inputs/
       if [[ -z "$reference_fasta_index" ]]; then
-	echo "[*] No reference FASTA index found. Indexing now..."
-	samtools faidx inputs/$reference_fasta_name
+        echo "[*] No reference FASTA index found. Indexing now..."
+        samtools faidx inputs/$reference_fasta_name
       else
-	mv $reference_fasta_index_path inputs/
+        mv $reference_fasta_index_path inputs/
       fi
       CONFIG_CMD="${CONFIG_CMD} --referenceFasta inputs/$reference_fasta_name"
     fi
@@ -138,8 +138,10 @@ main() {
 
     # Add output prefix to outputs
     if [[ ! -z "$output_prefix" ]]; then
-      for f in out/*; do
-        mv {,$output_prefix.}$f
+      for f in out/**/*; do
+        filedir=`dirname $f`
+        filename=`basename $f`
+        mv $filedir/{,$output_prefix.}$filename
       done
     fi
  

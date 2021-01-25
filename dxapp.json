@@ -1,9 +1,9 @@
 {
-  "name": "manta",
+  "name": "stjude_manta",
   "title": "Manta",
-  "summary": "manta",
+  "summary": "DNAnexus implementation of Illumina's Manta structural variation caller (https://github.com/Illumina/manta)",
   "dxapi": "1.0.0",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "inputSpec": [
     {
       "name": "normal_bam",
@@ -59,7 +59,7 @@
       "class": "boolean",
       "optional": true,
       "default": true,
-      "help": "Flag for outputContig option. Default is true."
+      "help": "Flag for outputContig option. Default is true. Will output assembled contig sequences for the variant in the final VCF file."
     },
     {
       "name": "call_regions",
@@ -67,7 +67,7 @@
       "class": "boolean",
       "optional": true,
       "default": true,
-      "help": "Flag for callRegions option. Should only be used for GRCh38 samples."
+      "help": "Flag for callRegions option. Should only be used for GRCh38 samples. Restricts structural variant calling to the canonical chromosomes."
     },
     {
       "name": "output_prefix",
@@ -100,8 +100,8 @@
     "interpreter": "bash",
     "file": "src/manta.sh",
     "distribution": "Ubuntu",
-    "release": "16.04",
-    "version": "1"
+    "release": "20.04",
+    "version": "0"
   },
   "access": {
     "network": [

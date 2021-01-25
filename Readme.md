@@ -1,7 +1,11 @@
 <!-- dx-header -->
 # Manta (DNAnexus Platform App)
 
-manta
+DNAnexus platform implemenation of Illumina's Manta structural variant caller.
+Can perform single sample or paired analysis.
+
+See the Manta User Guide (https://github.com/Illumina/manta/blob/master/docs/userGuide/README.md)
+for details on Manta.
 
 This is the source code for an app that runs on the DNAnexus Platform.
 For more information about how to run or modify it, see

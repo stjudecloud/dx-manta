@@ -1,7 +1,7 @@
 {
   "name": "stjude_manta",
   "title": "Manta",
-  "summary": "DNAnexus implementation of Illumina's Manta structural variation caller (https://github.com/Illumina/manta)",
+  "summary": "DNAnexus implementation of Illumina's Manta structural variation caller v1.6 (https://github.com/Illumina/manta)",
   "dxapi": "1.0.0",
   "version": "1.0.0",
   "inputSpec": [
@@ -43,7 +43,7 @@
       "class": "file",
       "optional": true,
       "patterns": ["*.fa", "*.fasta"],
-      "help": "Reference FASTA file."
+      "help": "Reference FASTA file (required). If none is provided, a default hg38 reference will be used."
     },
     {
       "name": "reference_fasta_index",

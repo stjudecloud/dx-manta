@@ -70,7 +70,7 @@ main() {
         samtools index inputs/$tumor_bam_name
       fi
 
-      CONFIG_CMD="${CONFIG_CMD} --tumorBam inputs/${$tumor_bam_name}"
+      CONFIG_CMD="${CONFIG_CMD} --tumorBam inputs/${tumor_bam_name}"
     fi
 
     # Setup Reference Fasta

@@ -3,7 +3,7 @@
   "title": "Manta",
   "summary": "DNAnexus implementation of Illumina's Manta structural variation caller v1.6 (https://github.com/Illumina/manta)",
   "dxapi": "1.0.0",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "inputSpec": [
     {
       "name": "normal_bam",
@@ -105,6 +105,9 @@
     "execDepends": [
       {
         "name": "samtools"
+      },
+      {
+        "name": "python"
       }
     ]
   },

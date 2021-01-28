@@ -59,7 +59,7 @@ for details on Manta.
                           svCandidateGenerationStats.xml
                           svCandidateGenerationStats.tsv 
 
-### Tips
+## Tips
 
 * Instance Types - Manta can parallelize across multiple cores, therefore it
   is preferable to choose an instance type with many cores. The other key
@@ -73,3 +73,21 @@ for details on Manta.
 * Hg19 samples - To run hg19 samples, specify the `reference_fasta` and
   `reference_fasta_index` inputs as the default references are GRCh38.
   Call Regions option should be set to `false`.
+
+## Troubleshooting
+
+### Storage
+
+Ensure the instance type has enough storage space for all the inputs
+and reference files. The reference fasta is about 3GB in size.
+
+Typically for single WGS germline analysis, we recommend `azure:mem1_ssd1_x8`
+or `azure:mem1_ssd1_x16` instances. For tumor-normal paired analysis, we
+recommend `azure:mem2_ssd1_x16`.
+
+### Input mismatches
+
+If the index files are not correct or if the germline, tumor samples aren't a
+pair, then the app will error possibly with a vague error message. If the app
+has errors where it cannot read the input bams, ensure that all the indices are
+correct. It is also recommended to input the correct reference FASTA to the app.

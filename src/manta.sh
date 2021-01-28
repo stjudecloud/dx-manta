@@ -3,10 +3,6 @@
 main() {
     set -exo pipefail
 
-    # Install packages
-    sudo apt-get update -qq
-    sudo apt-get install -qq bzip2 gcc g++ make python zlib1g-dev samtools
-
     echo "Value of normal_bam: '$normal_bam'"
     echo "Value of normal_bam_index: '$normal_bam_index'"
     echo "Value of tumor_bam: '$tumor_bam'"

@@ -94,14 +94,19 @@
   "runSpec": {
     "timeoutPolicy": {
       "*": {
-        "hours": 48
+        "hours": 24
       }
     },
     "interpreter": "bash",
     "file": "src/manta.sh",
     "distribution": "Ubuntu",
     "release": "16.04",
-    "version": "1"
+    "version": "1",
+    "execDepends": [
+      {
+        "name": "samtools"
+      }
+    ]
   },
   "access": {
     "network": [
@@ -125,5 +130,9 @@
         }
       }
     }
-  }
+  },
+  "authorizedUsers": [
+    "org-stjude_cloud",
+    "org-stjude_cloud_app_runners"
+  ]
 }

@@ -3,10 +3,6 @@
 main() {
     set -exo pipefail
 
-    # Install packages
-    sudo apt-get update -qq
-    sudo apt-get install -qq bzip2 gcc g++ make python zlib1g-dev samtools
-
     echo "Value of normal_bam: '$normal_bam'"
     echo "Value of normal_bam_index: '$normal_bam_index'"
     echo "Value of tumor_bam: '$tumor_bam'"
@@ -31,11 +27,11 @@ main() {
 
     # Check input BAMs
     if [[ -z "$tumor_bam" ]]; then
-      echo "[*] No tumor sample. Assuming normal bams only"
+      echo "[*] No tumor sample. Assuming normal bams only."
 
       for bam in inputs/*.bam
       do
-        echo "Checking normal bam file $bam"
+        echo "[*] Adding normal bam file: $bam"
         bam_name=`basename $bam`
         if [ ! -f "inputs/$bam_name.bai" ]; then
           echo "[*] No index file found for bam. Generating index..."
@@ -54,7 +50,6 @@ main() {
       fi
 
       bam=${bams[0]}
-      echo "DEBUG: ${bam}"
       bam_name=`basename $bam`
       if [[ -z "inputs/$bam_name.bai" ]]; then
         echo "[*] No index file found for normal bam. Generating index..."

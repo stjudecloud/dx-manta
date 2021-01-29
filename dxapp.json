@@ -2,6 +2,7 @@
   "name": "stjude_manta",
   "title": "Manta",
   "summary": "DNAnexus implementation of Illumina's Manta structural variation caller v1.6 (https://github.com/Illumina/manta)",
+  "categories": ["Structural Variation"],
   "dxapi": "1.0.0",
   "version": "1.0.1",
   "inputSpec": [
@@ -137,5 +138,9 @@
   "authorizedUsers": [
     "org-stjude_cloud",
     "org-stjude_cloud_app_runners"
+  ],
+  "developers": [
+     "jobin.sunny_stjude.org",
+     "user-athrashe"
   ]
 }
